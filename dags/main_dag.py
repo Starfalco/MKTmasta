@@ -1,14 +1,16 @@
-from airflow.models import DAG
+from airflow.models import DAG # airflow version 2.x
+from airflow.sdk import DAG, task # airflow version 3.x
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
+import datetime as dt
 from datetime import timedelta
 import sys
 sys.path.append("/opt/airflow/dags/modules/")
 from extracts_tasks import prices_task, earnings_estimate_task, earnings_history_task, info_task
-
+ 
 args = {
     'owner': 'Nawar',
-    'start_date': days_ago(1), # make start date in the past
+    'start_date': dt.datetime(2025, 04, 01),# days_ago(1), # make start date in the past
     'retries': 2,
     'retry_delay': timedelta(minutes=3)
 }

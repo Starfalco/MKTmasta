@@ -49,6 +49,7 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 10
+    AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS : 'true'
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -79,7 +80,11 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
-    command: webserver
+    command: bash -c "
+      airflow db migrate
+      && airflow api-server
+      && airflow dag-processor
+      "
     ports:
       - 8080:8080
     healthcheck:
@@ -91,18 +96,21 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
-    command: scheduler
+    command: bash -c "
+      airflow db migrate
+      && airflow scheduler
+      "
     restart: always
 
-  # airflow-init:
-  #   <<: *airflow-common
-  #   command: version
-  #   environment:
-  #     <<: *airflow-common-env
-  #     _AIRFLOW_DB_UPGRADE: 'true'
-  #     _AIRFLOW_WWW_USER_CREATE: 'true'
-  #     _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
-  #     _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+  airflow-init:
+    <<: *airflow-common
+    command: version
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_MIGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
 
 volumes:
   postgres-db-volume:
