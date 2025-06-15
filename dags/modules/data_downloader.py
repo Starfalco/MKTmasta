@@ -12,6 +12,15 @@ import _utils as _utils
 import _shared as _shared
 from requests_ratelimiter import LimiterSession, RequestRate, Limiter, Duration
 
+import json
+import os
+
+dag_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(dag_dir, 'config.json')
+
+with open(config_path) as stream:
+    config = json.load(stream)
+
 # This is required to handle keyboard interruptions and
 # to kill all threads if such an interruption occurs.
 multitasking.set_max_threads(multitasking.config['CPU_CORES'])
@@ -20,11 +29,11 @@ signal.signal(signal.SIGINT, multitasking.killall)
 class Extract(ABC):
     def __init__(self, tickers):
         self.tickers = tickers  # expect list of tickers
-        self.request_rate = RequestRate(2, Duration.SECOND)
+        self.request_rate = config['reqrate']
         self.limiter = Limiter(self.request_rate)
         self.session = LimiterSession(limiter=self.limiter)
         self.session.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
-        self.folder_path = '/extracts/'
+        self.folder_path = config['epath']
         # self.folder_path = 'extracts/' # uncomment for ide run
     
     @abstractmethod

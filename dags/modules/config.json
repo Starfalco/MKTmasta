@@ -1,0 +1,9 @@
+{
+    
+"path1" : "/inputs/de/sp500_list.csv",
+"epath" : "/extracts/",
+"edate" : "2024-06-01",
+"sdate" :"2024-06-30",
+
+"reqrate" : "RequestRate(2, Duration.SECOND)"
+}
