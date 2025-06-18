@@ -29,11 +29,11 @@ signal.signal(signal.SIGINT, multitasking.killall)
 class Extract(ABC):
     def __init__(self, tickers):
         self.tickers = tickers  # expect list of tickers
-        self.request_rate = config['reqrate']
+        self.request_rate = RequestRate(config['Request_Rate'], Duration.SECOND)
         self.limiter = Limiter(self.request_rate)
         self.session = LimiterSession(limiter=self.limiter)
         self.session.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
-        self.folder_path = config['epath']
+        self.folder_path = config['extract_path']
         # self.folder_path = 'extracts/' # uncomment for ide run
     
     @abstractmethod

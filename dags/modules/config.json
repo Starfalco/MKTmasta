@@ -1,9 +1,9 @@
 {
     
-"path1" : "/inputs/de/sp500_list.csv",
-"epath" : "/extracts/",
-"edate" : "2024-06-01",
-"sdate" :"2024-06-30",
+"path_1" : "/inputs/sp500_list.csv",
+"extract_path" : "/extracts/",
+"end_date" : "2024-06-01",
+"start_date" :"2024-06-30",
 
-"reqrate" : "RequestRate(2, Duration.SECOND)"
+"request_rate" : "2"
 }

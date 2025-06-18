@@ -12,7 +12,7 @@ with open(config_path) as stream:
 
 def prices_task():
 
-    price_extract = Prices(get_input(), starting_date=config['sdate'], ending_date=config['edate'])
+    price_extract = Prices(get_input(), starting_date=config['start_date'], ending_date=config['end_date'])
     price_extract.get_data()
 
 def earnings_estimate_task():
@@ -31,7 +31,7 @@ def info_task():
     info_extract.get_data()
 
 def get_input():
-    file_ticker = config['path1']
+    file_ticker = config['path_1']
     # file_ticker = 'inputs/sp500_list.csv' # uncomment for ide run
     df_ticker = pd.read_csv(file_ticker,encoding='utf-8',sep=';')['Symbol']
     list_ticker = list(df_ticker)
