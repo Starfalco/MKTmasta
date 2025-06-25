@@ -1,23 +1,12 @@
-import os
-import pandas as pd
-from json import loads, dumps
+from fastapi import APIRouter
+from backend.src.earnings_estimate.earnings_estimate_manager import earnings_estimate
 
-class earnings_estimate():
-    path_earnings_estimate = 'extracts/earnings_estimate.parquet'
+router = APIRouter(prefix="/retrieve",
+    tags=["retrieve"])
 
-    def get_earnings_estimate(symbol : str):
-        
-        # To get the directory of the script/file:
-        current_dir = os.path.dirname(os.path.realpath(__file__))
+@router.get("/earnings_estimate/{symbol}")
+async def get(symbol : str):
 
-        # To get one directory up from the current file
-        parent_dir = os.path.abspath(os.path.join(current_dir, "..", "..", ".."))
+    get_earnings_estimate = earnings_estimate.get_earnings_estimate(symbol)
 
-        data_path = os.path.join(parent_dir, "extracts", "earnings_estimate.parquet")
-        
-        df = pd.read_parquet(data_path,engine = "pyarrow")
-        df = df[df['Ticker'] == symbol]
-        result = df.to_json(orient="columns")
-        parsed = loads(result)
-
-        return parsed
+    return get_earnings_estimate
