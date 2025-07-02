@@ -1,3 +1,0 @@
-fastapi
-fastapi[standard]
-pyspark.sql

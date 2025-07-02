@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 
 class earnings_estimate_model(BaseModel):
+    period: Optional[str] = None
     avg: Optional[float] = None
     low: Optional[float] = None
     high: Optional[float] = None

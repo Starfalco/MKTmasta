@@ -11,3 +11,11 @@ async def get(symbol: str) -> list[earnings_estimate_model]:
     get_earnings_estimate = earnings_estimate.get_earnings_estimate(symbol)
 
     return get_earnings_estimate
+
+
+@router.get("/earnings_estimate")
+async def get() -> list[earnings_estimate_model]:
+
+    get_earnings_estimate = earnings_estimate.get_earnings_estimate()
+
+    return get_earnings_estimate
