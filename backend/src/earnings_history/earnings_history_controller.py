@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.src.earnings_history.earnings_history_manager import earnings_history
+from .earnings_history_manager import earnings_history
 from .earnings_history_model import earnings_history_model
 
 router = APIRouter(prefix="/retrieve", tags=["retrieve"])

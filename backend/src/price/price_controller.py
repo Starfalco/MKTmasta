@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.src.price.price_manager import price
+from .price_manager import price
 from .price_model import price_model
 
 router = APIRouter(prefix="/retrieve", tags=["retrieve"])
