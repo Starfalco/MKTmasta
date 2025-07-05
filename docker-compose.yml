@@ -71,7 +71,7 @@ services:
     working_dir: /code
     image: ${FASTAPI_IMAGE_NAME:-mktmasta_fastapi:latest}
     ports:
-     - "8000:80"
+     - "80:80"
     volumes:
      - ./backend/src:/code/src
      - ./extracts:/code/extracts
