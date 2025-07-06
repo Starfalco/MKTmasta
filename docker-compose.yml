@@ -71,11 +71,11 @@ services:
     working_dir: /code
     image: ${FASTAPI_IMAGE_NAME:-mktmasta_fastapi:latest}
     ports:
-     - "80:80"
+     - "8000:8000"
     volumes:
      - ./backend/src:/code/src
      - ./extracts:/code/extracts
-    command: ["fastapi", "run", "src/main.py", "--port", "80"]
+    command: ["fastapi", "run", "src/main.py"]
 
 volumes:
   postgres-db-volume:
