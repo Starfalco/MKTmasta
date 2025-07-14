@@ -11,8 +11,6 @@ async def get(
     symbol: str, start_date: date = None, end_date: date = None
 ) -> list[extracts_price_model]:
 
-    extracts_price_return = extracts_price.get_extracts_price(
-        symbol, start_date, end_date
-    )
+    response = extracts_price.get_price(symbol, start_date, end_date)
 
-    return extracts_price_return
+    return response

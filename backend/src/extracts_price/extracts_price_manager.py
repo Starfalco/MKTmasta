@@ -8,18 +8,23 @@ from datetime import date
 
 class extracts_price:
 
-    def get_extracts_price(
-        symbol: str = None, start_date: date = None, end_date: date = None
-    ):
+    def get_price(symbol: str = None, start_date: date = None, end_date: date = None):
 
-        session = requests.Session(impersonate="chrome")
+        try:
 
-        df = yf.download(
-            symbol, start=start_date, end=end_date, session=session, group_by="ticker"
-        ).stack(level=0)
-        df = pd.DataFrame(df.to_records())
+            session = requests.Session(impersonate="chrome")
 
-        result = df.to_json(orient="records")
-        parsed = loads(result)
+            df = yf.download(
+                symbol, start=start_date, end=end_date, session=session, group_by="ticker"
+            ).stack(level=0)
 
-        return parsed
+            df = pd.DataFrame(df.to_records())
+
+            result = df.to_json(orient="records")
+            response = loads(result)
+
+        except Exception as e:
+
+            response = e
+
+        return response
