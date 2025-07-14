@@ -5,6 +5,7 @@ from .earnings_estimate import earnings_estimate_controller
 from .earnings_history import earnings_history_controller
 from .price import price_controller
 from .scope import scope_controller
+from .extracts_price import extracts_price_controller
 import json
 
 config_path = "src/config.json"
@@ -28,3 +29,4 @@ app.include_router(earnings_estimate_controller.router)
 app.include_router(earnings_history_controller.router)
 app.include_router(price_controller.router)
 app.include_router(scope_controller.router)
+app.include_router(extracts_price_controller.router)
