@@ -11,6 +11,6 @@ async def get(
     symbol: str
 ) -> list[extracts_earnings_dates_model]:
 
-    response = extracts_earnings_dates.get_earnings_dates(symbol)
+    response = extracts_earnings_dates.get_extracts_earnings_dates(symbol)
 
     return response

@@ -9,13 +9,13 @@ from datetime import date
 class extracts_earnings_dates:
 
 
-    def get_earnings_dates(symbol: str = None):
+    def get_extracts_earnings_dates(symbol: str = None):
 
         try:
 
             session = requests.Session(impersonate="chrome")
 
-            df = pd.DataFrame(yf.Ticker("aapl", session=None).get_earnings_dates()).reset_index()
+            df = pd.DataFrame(yf.Ticker(symbol, session=session).get_calendar())
 
             df = pd.DataFrame(df.to_records())
 
@@ -24,6 +24,6 @@ class extracts_earnings_dates:
 
         except Exception as e:
 
-            response = e
+            raise e
 
         return response
