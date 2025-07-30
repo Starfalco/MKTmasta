@@ -12,6 +12,7 @@ import signal
 import _utils as _utils
 import _shared as _shared
 from requests_ratelimiter import LimiterSession, RequestRate, Limiter, Duration
+from curl_cffi import requests
 
 import json
 
@@ -32,6 +33,7 @@ class Extract(ABC):
         self.request_rate = RequestRate(int(config["request_rate"]), Duration.SECOND)
         self.limiter = Limiter(self.request_rate)
         self.session = LimiterSession(limiter=self.limiter)
+        self.session = requests.Session(impersonate="chrome")
         self.session.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36"
         }
@@ -72,6 +74,38 @@ class Earnings_Estimate(Extract):
         df = pd.DataFrame(
             yf.Ticker(ticker, session=self.session).get_earnings_estimate()
         )
+        df["Ticker"] = ticker  # add a column for ticker name
+        self.results.append(df)
+
+        if progress:
+            _shared._PROGRESS_BAR.animate()
+
+    def get_data(self, progress=True):
+
+        if progress:
+            _shared._PROGRESS_BAR = _utils.ProgressBar(len(self.tickers), "completed")
+
+        for ticker in self.tickers:
+            self.get_data_for_ticker(ticker, progress=(progress))
+
+        # wait for all tasks to finish before writing the results to a delta_lake file
+        multitasking.wait_for_tasks()
+
+        # concatenate all dataframes and write to the delta_lake file
+        all_data = pd.concat(self.results)
+        # write_deltalake(self.output_path, all_data, mode='overwrite')
+        all_data.to_parquet(self.output_path)
+
+
+class Earnings_Dates(Extract):
+    def __init__(self, tickers):
+        super().__init__(tickers)
+        self.results = []  # list to store all results
+        self.output_path = self.folder_path + "earnings_dates.parquet"
+
+    @multitasking.task
+    def get_data_for_ticker(self, ticker, progress=True):
+        df = pd.DataFrame(yf.Ticker(ticker, session=self.session).get_calendar())
         df["Ticker"] = ticker  # add a column for ticker name
         self.results.append(df)
 
