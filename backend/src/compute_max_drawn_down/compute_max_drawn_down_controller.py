@@ -11,6 +11,7 @@ async def get(
     symbol: str, start_date: date = None, end_date: date = None
 ) -> list[compute_max_drawn_down_model]:
 
-    response = compute_max_drawn_down.get_price(symbol, start_date, end_date)
+    mdd = compute_max_drawn_down(symbol,start_date,end_date)
+    response = mdd.get_max_drawn_down()
 
     return response

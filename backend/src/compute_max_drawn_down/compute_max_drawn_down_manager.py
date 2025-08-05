@@ -1,25 +1,26 @@
 import os
 import pandas as pd
 from json import loads
-import yfinance as yf
-from curl_cffi import requests
 from datetime import date
 from ..extracts_price.extracts_price_manager import extracts_price
 
 
 class compute_max_drawn_down:
 
-    def get_max_drawn_down(symbol: str = None, start_date: date = None, end_date: date = None):
+    def __init__(self,symbol: str = None, start_date: date = None, end_date: date = None):
+        self.symbol = symbol
+        self.price = extracts_price.get_price(symbol,start_date,end_date)
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def get_max_drawn_down(self):
 
         try:
 
-            session = requests.Session(impersonate="chrome")
+            df_price = pd.DataFrame(self.price)
+            df_mdd = self.__build_max_drawn_down(df_price)
 
-            df = yf.download(
-                symbol, start=start_date, end=end_date, session=session, group_by="ticker"
-            ).stack(level=0)
-
-            df = pd.DataFrame(df.to_records())
+            df = pd.DataFrame(df_mdd.to_records())
 
             result = df.to_json(orient="records")
             response = loads(result)
@@ -30,25 +31,20 @@ class compute_max_drawn_down:
 
         return response
     
-    def build_max_drawn_down(my_df):
+    def __build_max_drawn_down(self,my_df):
 
         MDD = 0
-        data = {'MDD':'no MDD', 'Occurrence':'no occurrence', 'Max Price':'no MaxPrice'} 
+        data = {} 
         
         for index in range(1, len(my_df)):
-            gap = my_df.loc[len(my_df)-1,'Adj Close']/my_df.loc[len(my_df) - index,'Adj Close'] - 1
+            gap = my_df.loc[len(my_df)-1,'Close']/my_df.loc[len(my_df) - index,'Close'] - 1
             if gap < MDD:
                 
                 MDD = gap
                 occurrence = my_df.loc[len(my_df)-index,'Date']
-                MaxPrice = my_df.loc[len(my_df)-index,'Adj Close']
-                data = {'MDD':["{:.2%}".format(MDD)], 'Occurrence':[occurrence], 'Max Price':[MaxPrice]} 
+                MaxPrice = my_df.loc[len(my_df)-index,'Close']
+                data = {'max_drawn_down':[MDD], 'occurrence':[occurrence], 'max_price':[MaxPrice]} 
         
         output = pd.DataFrame(data, index = [0])
-        
-        #output = ("{:.2%}".format(MDD),occurrence)
     
         return output
-    
-    def get_price():
-        return
