@@ -30,7 +30,7 @@ class compute_max_drawn_down:
 
         return response
     
-    def Function_MaxDrawnDown(my_df):
+    def build_max_drawn_down(my_df):
 
         MDD = 0
         data = {'MDD':'no MDD', 'Occurrence':'no occurrence', 'Max Price':'no MaxPrice'} 
@@ -49,3 +49,6 @@ class compute_max_drawn_down:
         #output = ("{:.2%}".format(MDD),occurrence)
     
         return output
+    
+    def get_price():
+        return
