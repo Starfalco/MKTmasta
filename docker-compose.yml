@@ -78,9 +78,9 @@ services:
      - ./inputs:/code/inputs
     command: ["fastapi", "run", "src/main.py"]
 
-  ui:
+  frontend:
     build: .
-    working_dir: /visual
+    working_dir: /frontend
     image: ${ANGULAR_IMAGE_NAME:-mktmasta_angular:latest}
     ports:
      - "4200:4200"
