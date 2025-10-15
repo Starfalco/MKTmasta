@@ -33,6 +33,7 @@ services:
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
     healthcheck:
@@ -41,23 +42,6 @@ services:
       retries: 5
     restart: always
 
-  postgres-users:
-    image: postgres:13
-    container_name: postgres_users
-    restart: always
-    environment:
-      POSTGRES_USER: users
-      POSTGRES_PASSWORD: users
-      POSTGRES_DB: users
-    volumes:
-      - postgres-users-data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U users -d users"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
@@ -104,6 +88,8 @@ services:
     image: ${FASTAPI_IMAGE_NAME:-mktmasta_fastapi:latest}
     ports:
      - "8000:8000"
+    env_file:
+      - backend/.env
     volumes:
      - ./backend/src:/code/backend/src
      - ./utils:/code/utils
