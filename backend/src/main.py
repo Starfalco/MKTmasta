@@ -17,6 +17,7 @@ from .filter_numeric_field import filter_numeric_field_controller
 from .sort_by_fields import sort_by_fields_controller
 from .filter_field_unique_values import filter_field_unique_values_controller
 from .filter_string_field import filter_string_field_controller
+from .users import users_controller
 import json
 
 config_path = "backend/src/config.json"
@@ -52,3 +53,8 @@ app.include_router(filter_numeric_field_controller.router)
 app.include_router(sort_by_fields_controller.router)
 app.include_router(filter_field_unique_values_controller.router)
 app.include_router(filter_string_field_controller.router)
+app.include_router(users_controller.router)
+
+@app.get("/")  # API up
+def root():
+    return {"status": "ok", "message": "Hello World"}
