@@ -8,6 +8,7 @@ from .retrieve_scope import retrieve_scope_controller
 from .extracts_price import extracts_price_controller
 from .extract_earnings_dates import extracts_earnings_dates_controller
 from .compute_max_drawn_down import compute_max_drawn_down_controller
+from .users import users_controller
 import json
 
 config_path = "backend/src/config.json"
@@ -34,3 +35,8 @@ app.include_router(retrieve_scope_controller.router)
 app.include_router(extracts_price_controller.router)
 app.include_router(extracts_earnings_dates_controller.router)
 app.include_router(compute_max_drawn_down_controller.router)
+app.include_router(users_controller.router)
+
+@app.get("/")  # API up
+def root():
+    return {"status": "ok", "message": "Hello World"}
