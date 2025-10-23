@@ -5,3 +5,4 @@ yfinance==0.2.65
 SQLAlchemy>=2.0
 psycopg2-binary>=2.9
 curl_cffi
+passlib[bcrypt]>=1.7.4
