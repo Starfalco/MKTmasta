@@ -10,7 +10,6 @@ import multitasking
 import signal
 import _utils
 import _shared
-from _const import PRICE_EXTRACTS_RENAME
 from requests_ratelimiter import LimiterSession, RequestRate, Limiter, Duration
 from curl_cffi import requests
 

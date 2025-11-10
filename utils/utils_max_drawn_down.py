@@ -10,7 +10,7 @@ def build_max_drawn_down(my_df):
             if gap < MDD:
                 
                 MDD = gap
-                occurrence = my_df.loc[len(my_df)-index,'Date']
+                occurrence = my_df.loc[len(my_df)-index,'date']
                 MaxPrice = my_df.loc[len(my_df)-index,'close']
                 data = {'max_drawn_down':[MDD], 'occurrence':[occurrence], 'max_price':[MaxPrice]} 
         

@@ -4,8 +4,8 @@ from datetime import date as dt
 
 
 class retrieve_price_model(BaseModel):
-    date: Optional[dt] = Field(validation_alias="Date")
-    ticker: Optional[str] = Field(validation_alias="Ticker")
+    date: Optional[dt]
+    ticker: Optional[str]
     open: Optional[float] = None
     high: Optional[float] = None
     low: Optional[float] = None
