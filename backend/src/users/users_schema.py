@@ -5,11 +5,14 @@ from uuid import UUID
 class UserIn(BaseModel):
   user_name: str
   email: EmailStr
-  is_admin: bool = False,
+  is_admin: bool = False
   password: str
 
-class UserOut(UserIn):
+class UserOut(BaseModel):
   id: UUID
+  user_name: str
+  email: EmailStr
+  is_admin: bool
 
 class UserUpdate(BaseModel):
   user_name: Optional[str] = None

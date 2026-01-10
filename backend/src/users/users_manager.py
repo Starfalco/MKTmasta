@@ -3,12 +3,10 @@ from .users_model import Users
 from .users_schema import UserIn, UserUpdate
 from fastapi import HTTPException, status
 from uuid import UUID
-import bcrypt
+from sqlalchemy import or_
+from ..common.security import hash_password
 
 # CENTRALISER GESTION ERREURS AVEC SQL PAR LA SUITE DS UN EXCEPTION.PY!!
-
-def hash_password(password: str):
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 def get_users(db: Session, skip: int = 0, limit: int = 10):
     # db: Session → type hint pour autocomplétion et clarté (session SQLAlchemy injectée via get_db)
@@ -25,12 +23,18 @@ def get_one_user(db: Session, user_id: UUID):
     return user
 
 def create_user(db: Session, user: UserIn):
+    exists = db.query(Users).filter(or_(Users.email == user.email, Users.user_name == user.user_name)).first()
+
+    if exists:
+        raise HTTPException(status_code=409, detail="Email or username already used")
+    
     db_user = Users(
         user_name=user.user_name, 
         email=user.email,
         password = hash_password(user.password),
         is_admin=user.is_admin,
     )
+
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
