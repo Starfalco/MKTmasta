@@ -35,7 +35,6 @@ def register(db: Session, data: RegisterIn):
 
 
 def login(db: Session, data: LoginIn) -> str:
-    print('on print poto')
     user = db.query(Users).filter(Users.email == data.email).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")

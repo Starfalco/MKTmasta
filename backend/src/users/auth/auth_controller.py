@@ -14,7 +14,6 @@ def register_route(data: RegisterIn, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=TokenOut)
 def login_route(data: LoginIn, db: Session = Depends(get_db)):
-    print('on print poto')
     token = login(db, data)
     return {"access_token": token, "token_type": "bearer"}
 
